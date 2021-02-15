@@ -8,35 +8,28 @@ using flowgear.Sdk;
 using S3ToAzureBlob.Config;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace S3ToAzureBlob
 {
-    [Node("EventBooking.FlowgearNodes.S3ToFromAzureBlob", "S3 to/from Azure Blob", NodeType.Connector, "icon.png", RunFrom.DropPointUnrestrictedOnly)]
+    [Node("EventBooking.FlowgearNodes.S3ToFromAzureBlob", "S3 to/from Azure Blob", NodeType.Connector, "icon.png",
+        RunFrom.DropPointUnrestrictedOnly)]
     public class S3ToAzureBlob
     {
         [Property(FlowDirection.Input, ExtendedType.ConnectionProfile)]
         public S3ToAzureBlobConnection Connection { get; set; }
 
-        [Property(FlowDirection.Input)]
-        public TransferDirection Direction { get; set; }
+        [Property(FlowDirection.Input)] public TransferDirection Direction { get; set; }
 
-        [Property(FlowDirection.Input)]
-        public string S3BucketName { get; set; }
+        [Property(FlowDirection.Input)] public string S3BucketName { get; set; }
 
-        [Property(FlowDirection.Input)]
-        public string S3ObjectKey { get; set; }
+        [Property(FlowDirection.Input)] public string S3ObjectKey { get; set; }
 
-        [Property(FlowDirection.Input)]
-        public string AzureBlobName { get; set; }
+        [Property(FlowDirection.Input)] public string AzureBlobName { get; set; }
 
-        [Property(FlowDirection.Input)]
-        public string AzureBlobContentType { get; set; }
+        [Property(FlowDirection.Input)] public string AzureBlobContentType { get; set; }
 
-        [Configuration]
-        public Dictionary<string, object> Configuration { get; set; }
+        [Configuration] public Dictionary<string, object> Configuration { get; set; }
 
         [Invoke]
         public InvokeResult Invoke()
@@ -79,9 +72,9 @@ namespace S3ToAzureBlob
             var connectionString = "DefaultEndpointsProtocol=https;" +
                                    $"AccountName={Connection.AzureAccountName};"
                                    + (Connection.AzureAuthMethod == AzureAuthMethod.AccountKey
-                                       ? $"AccountKey={Connection.AzureAuthCredential};"
+                                       ? $"AccountKey={Connection.AzureAuthCredential}"
                                        : $"SharedAccessSignature={Connection.AzureAuthCredential}") +
-                                       "EndpointSuffix=core.windows.net";
+                                   ";EndpointSuffix=core.windows.net";
             var serviceClient = new BlobServiceClient(connectionString);
             var containerClient = serviceClient.GetBlobContainerClient(Connection.AzureContainer);
             return containerClient;
